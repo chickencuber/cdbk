@@ -1,0 +1,10 @@
+name = "Test"     #required
+version = "0.0.0" #required
+
+payload = "test.sh" #required
+
+icon = "icon.png"      # defaults to None
+description = "A test" #defaults to None
+
+categories = ["test"] # defaults to []
+terminal = true       #defaults to false

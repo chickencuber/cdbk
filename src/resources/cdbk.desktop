@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=CDBK Package Installer
+Comment=Open CDBK packages
+Exec=cdbk install %f
+Icon=application-x-cdbk
+Type=Application
+NoDisplay=true
+Terminal=true
+MimeType=application/x-cdbk;
