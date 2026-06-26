@@ -3,6 +3,11 @@ name = "cdbk"
 version = "0.1.0"
 edition = "2024"
 
+license = "MIT"
+authors = ["chickencuber"]
+repository = "https://github.com/chickencuber/cdbk"
+description = "a way to bundle apps for linux"
+
 [dependencies]
 zip = "8.6.0"
 toml = "1.1.2"
