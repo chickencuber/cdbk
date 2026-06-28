@@ -2,7 +2,7 @@
 Name=CDBK Installer
 Comment=Open CDBK bundles 
 Exec={{BIN}} open %f
-Terminal=true
+Terminal=false
 Type=Application
 Icon=application-x-cdbk
 Categories=Utility;
