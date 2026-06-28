@@ -1,9 +1,11 @@
 [Desktop Entry]
-Name=CDBK Package Installer
-Comment=Open CDBK packages
-Exec=cdbk install %f
-Icon=application-x-cdbk
-Type=Application
-NoDisplay=true
+Name=CDBK Installer
+Comment=Open CDBK bundles 
+Exec={{BIN}} open %f
 Terminal=true
+Type=Application
+Icon=application-x-cdbk
+Categories=Utility;
+StartupNotify=false
+NoDisplay=true
 MimeType=application/x-cdbk;

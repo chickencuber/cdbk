@@ -48,31 +48,6 @@ pub fn extract(mut v: Vec<String>) {
     //skip header
     file.seek(SeekFrom::Start(4)).unwrap();
     let mut zip = ZipArchive::new(file).unwrap();
-
     fs::create_dir_all(&out).unwrap();
-
-    for i in 0..zip.len() {
-        let mut entry = zip.by_index(i).unwrap();
-
-        let name = entry.name();
-
-        let outpath = out.join(name);
-
-        if !outpath.starts_with(&out) {
-            eprintln!("skipping unsafe path: {}", name);
-            continue;
-        }
-
-        if name.ends_with('/') {
-            fs::create_dir_all(&outpath).unwrap();
-            continue;
-        }
-
-        if let Some(parent) = outpath.parent() {
-            fs::create_dir_all(parent).unwrap();
-        }
-
-        let mut outfile = fs::File::create(&outpath).unwrap();
-        std::io::copy(&mut entry, &mut outfile).unwrap();
-    }
+    zip.extract(out).unwrap();
 }

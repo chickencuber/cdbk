@@ -1,0 +1,113 @@
+export enum Page {
+    Main,
+    Done,
+}
+
+export enum Action {
+    Extract,
+    Install,
+}
+
+import { Button, ProgressIndicator, StandardButton } from "std-widgets.slint";
+export component Installer inherits Window {
+    title: "CDBK Installer";
+    width: 420px;
+    height: 320px;
+
+    in-out property <image> app_icon;
+    in-out property <string> app_name;
+
+    in-out property <Page> page: Page.Main;
+
+    in-out property <bool> progress: false;
+    in-out property <Action> action;
+
+    callback extract_clicked();
+    callback install_clicked();
+    VerticalLayout {
+        visible: root.page == Page.Main;
+        alignment: LayoutAlignment.center;
+        HorizontalLayout {
+            VerticalLayout {
+                Image {
+                    height: 240px;
+                    horizontal-alignment: ImageHorizontalAlignment.center;
+                    source: root.app_icon;
+                    width: 240px;
+                }
+
+                Text {
+                    font-italic: false;
+                    font-size: 30px;
+                    horizontal-alignment: TextHorizontalAlignment.center;
+                    text: root.app_name;
+                }
+            }
+
+            VerticalLayout {
+                alignment: LayoutAlignment.center;
+                cross-axis-alignment: CrossAxisAlignment.stretch;
+                padding: 5px;
+                spacing: 5px;
+                Button {
+                    enabled: !root.progress;
+                    checkable: false;
+                    checked: false;
+                    colorize-icon: false;
+                    primary: true;
+                    text: "Install";
+                    clicked => { install_clicked() };
+                }
+
+                Button {
+                    enabled: !root.progress;
+                    checkable: false;
+                    checked: false;
+                    colorize-icon: false;
+                    text: "Extract";
+                    clicked => { extract_clicked() };
+                }
+
+                StandardButton {
+                    kind: cancel;
+                    clicked => { root.close() }
+                }
+            }
+        }
+
+        //TASK(20260628-152101-496-n6-468): Make this actually show progress
+        HorizontalLayout {
+            visible: root.progress;
+            Text {
+                text: root.action == Action.Extract? "Extracting...": "Installing...";
+            }
+            ProgressIndicator {
+                indeterminate: true;
+            }
+        }
+    }
+
+    VerticalLayout {
+        alignment: LayoutAlignment.stretch;
+        cross-axis-alignment: CrossAxisAlignment.center;
+        visible: root.page == Page.Done;
+        Image {
+            height: 240px;
+            horizontal-alignment: ImageHorizontalAlignment.center;
+            source: root.app_icon;
+            width: 240px;
+        }
+
+        Text {
+            font-italic: false;
+            font-size: 30px;
+            horizontal-alignment: TextHorizontalAlignment.center;
+            text: root.action == Action.Extract ? "Finished Extracting" : "Finished Installing";
+        }
+
+        StandardButton {
+            kind: ok;
+            clicked => { root.close() }
+        }
+    }
+}

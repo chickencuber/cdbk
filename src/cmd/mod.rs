@@ -12,6 +12,8 @@ mod remove;
 pub use remove::*;
 mod uninstall;
 pub use uninstall::*;
+mod open;
+pub use open::*;
 
 
 pub const HELP: &str = r#"usage: cdbk [subcommand]
@@ -56,4 +58,8 @@ cdbk remove [bundle name]
 
 --- aliases ---
 r
+=====open=====
+opens a gui to handle the bundle
+
+cdbk open [path to bundle]
 "#;

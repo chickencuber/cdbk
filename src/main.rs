@@ -16,6 +16,7 @@ cmd! {
     cmd::list => "list",
     cmd::remove => "remove"|"r",
     cmd::uninstall => "uninstall",
+    cmd::open => "open",
 }
 
 

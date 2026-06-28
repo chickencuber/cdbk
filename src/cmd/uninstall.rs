@@ -43,13 +43,6 @@ pub fn uninstall(mut v: Vec<String>) {
     ).unwrap();
     fs::remove_dir_all(data_dir().unwrap()).unwrap();
 
-
-    let mimeapps = format!("{}/.local/share/applications/mimeapps.list", home);
-    let mimecache = format!("{}/.local/share/applications/mimeinfo.cache", home);
-
-    let _ = fs::remove_file(mimeapps);
-    let _ = fs::remove_file(mimecache);
-
     // update MIME DB
     Command::new("update-mime-database")
         .arg(&mime_root)

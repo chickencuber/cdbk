@@ -34,8 +34,6 @@ you can extract a bundle with `cdbk extract bundle.cdbk`, which will let you get
 run `cdbk remove "bundle name"` and it will install the bundle
 ### Uninstalling cdbk
 if you want to uninstall cdbk, make sure to run `cdbk uninstall` first to remove all stuff it changed, then you can uninstall it using cargo
-## Known issues
-- if using a glib based file manager, you may have to also run `gio mime application/x-cdbk cdbk.desktop` if it doesn't show in the open with menu
 ## Planned
 - a way for bundles to auto update
 [TODO](./TODO.md)

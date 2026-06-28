@@ -13,6 +13,7 @@ define! {
     args {
         bundle: String,
     };
+    rest=>rest:String;
 }
 
 pub fn remove(mut v: Vec<String>) {
@@ -28,5 +29,8 @@ pub fn remove(mut v: Vec<String>) {
     fs::remove_dir_all(data).unwrap();
     } else {
         eprintln!("bundle '{}' doesn't exist", args.bundle);
+    }
+    if args.rest.len() > 0 {
+        remove(vec![String::new()].iter().map(|v| v.clone()).chain(args.rest).collect())
     }
 }
