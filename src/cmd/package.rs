@@ -5,7 +5,8 @@ use std::{
 };
 
 use cmdparsing::define;
-use zip::{CompressionMethod, ZipWriter, write::SimpleFileOptions};
+use walkdir::WalkDir;
+use zip::{CompressionMethod, ZipWriter, write::{FileOptions, SimpleFileOptions}};
 
 use crate::{locations::rename, manifest::Manifest};
 
@@ -16,6 +17,28 @@ fn first_real_component(p: &Path) -> Option<&std::ffi::OsStr> {
             Component::Normal(s) => s,
             _ => unreachable!(),
         })
+}
+
+fn zip_dir<S: AsRef<Path>>(zip: &mut ZipWriter<File>, src: S, options: FileOptions<'_, ()>) {
+    let walkdir = WalkDir::new(&src);
+    for entry_result in walkdir.into_iter() {
+        let entry = entry_result.unwrap();
+        let path = entry.path();
+        let path_stripped = path.strip_prefix(&src).unwrap();
+        let path_as_string = path_stripped
+            .to_str()
+            .map(str::to_owned)
+            .unwrap();
+        if path.is_file() {
+            
+            zip.start_file(path_as_string, options).unwrap();
+            let mut f = File::open(path).unwrap();
+
+            std::io::copy(&mut f, zip).unwrap();
+        } else if !path_stripped.as_os_str().is_empty() {
+            zip.add_directory(path_as_string, options).unwrap();
+        }
+    }
 }
 
 const HELP: &str = r#"usage: cdbk package [file path]
@@ -99,7 +122,7 @@ pub fn package(mut v: Vec<String>) {
     } else if payload.components().count() > 1 {
         path.pop();
         path.push(first_real_component(&payload).expect("incorrect manifest"));
-        zip.add_directory_from_path(&path, options).unwrap();
+        zip_dir(&mut zip, &path, options);
     } else {
         path.pop();
         path.push(&payload);
