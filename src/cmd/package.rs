@@ -19,7 +19,8 @@ fn first_real_component(p: &Path) -> Option<&std::ffi::OsStr> {
         })
 }
 
-fn zip_dir<S: AsRef<Path>>(zip: &mut ZipWriter<File>, src: S, options: FileOptions<'_, ()>) {
+fn zip_dir<S: AsRef<Path>, T: ToString>(zip: &mut ZipWriter<File>, name: T, src: S, options: FileOptions<'_, ()>) {
+    zip.add_directory(name.to_string(), options).unwrap();
     let walkdir = WalkDir::new(&src);
     for entry_result in walkdir.into_iter() {
         let entry = entry_result.unwrap();
@@ -31,7 +32,7 @@ fn zip_dir<S: AsRef<Path>>(zip: &mut ZipWriter<File>, src: S, options: FileOptio
             .unwrap();
         if path.is_file() {
             
-            zip.start_file(path_as_string, options).unwrap();
+            zip.start_file(format!("{}/{}", name.to_string(), path_as_string), options).unwrap();
             let mut f = File::open(path).unwrap();
 
             std::io::copy(&mut f, zip).unwrap();
@@ -121,8 +122,9 @@ pub fn package(mut v: Vec<String>) {
         return;
     } else if payload.components().count() > 1 {
         path.pop();
-        path.push(first_real_component(&payload).expect("incorrect manifest"));
-        zip_dir(&mut zip, &path, options);
+        let name = first_real_component(&payload).expect("incorrect manifest").to_str().unwrap();
+        path.push(name);
+        zip_dir(&mut zip, name, &path, options);
     } else {
         path.pop();
         path.push(&payload);
