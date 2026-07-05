@@ -23,6 +23,7 @@ export component Installer inherits Window {
     in-out property <Action> action;
 
     callback extract_clicked();
+    callback extract_here_clicked();
     callback install_clicked();
     VerticalLayout {
         visible: root.page == Page.Main;
@@ -66,6 +67,15 @@ export component Installer inherits Window {
                     colorize-icon: false;
                     text: "Extract";
                     clicked => { extract_clicked() };
+                }
+
+                Button {
+                    enabled: !root.progress;
+                    checkable: false;
+                    checked: false;
+                    colorize-icon: false;
+                    text: "Extract Here";
+                    clicked => { extract_here_clicked() };
                 }
 
                 StandardButton {

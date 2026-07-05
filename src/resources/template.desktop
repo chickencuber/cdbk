@@ -1,0 +1,19 @@
+[Desktop Entry]
+Name={{ name }}
+Exec={{ exec }}
+Terminal={{ terminal }}
+Type=Application
+{% if description %}
+Comment={{ description }}
+{% endif %}
+{% if icon %}
+Icon={{ icon }}
+{% endif %}
+{% if categories %}
+Categories={% for category in categories %}{{ category }};{% endfor %}
+{% endif %}
+Actions=Uninstall;
+[Desktop Action Uninstall]
+Name=Uninstall {{ name }}
+Exec={{ BIN }} remove {{ name }}
+Icon=user-trash

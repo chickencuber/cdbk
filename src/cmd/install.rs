@@ -1,6 +1,7 @@
 use std::{fs, os::unix::fs::PermissionsExt, path::PathBuf};
 
 use cmdparsing::define;
+use minijinja::render;
 
 use crate::{
     cmd::extract,
@@ -75,24 +76,14 @@ pub fn install(mut v: Vec<String>) {
     let mut app = applications_dir().unwrap();
     app.push(format!("cdbk-{}", &manifest.name));
     app.set_extension("desktop");
-    let mut desktop = format!(
-        "[Desktop Entry]\nName={}\nExec={}\nTerminal={}\nType=Application\n",
-        &manifest.name,
-        exe.to_string_lossy(),
-        &manifest.terminal
-    );
-    if let Some(description) = manifest.description {
-        desktop.push_str(&format!("Comment={}\n", description));
-    }
-    if let Some(icon) = icon {
-        desktop.push_str(&format!("Icon={}\n", icon.to_string_lossy()));
-    }
-    if manifest.categories.len() > 0 {
-        desktop.push_str("Categories=");
-        for val in &manifest.categories {
-            desktop.push_str(&format!("{};", val));
-        }
-    }
+    let desktop = render!(include_str!("../resources/template.desktop"),     
+        name => &manifest.name,
+        exec => exe.to_string_lossy(),
+        terminal => manifest.terminal,
+        description => manifest.description.as_deref(),
+        icon => icon.as_ref().map(|p| p.to_string_lossy()),
+        categories => &manifest.categories,
+        BIN => &std::env::current_exe().unwrap());
     fs::write(&app, desktop).unwrap();
 
     let mut perms = fs::metadata(&app).unwrap().permissions();

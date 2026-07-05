@@ -1,5 +1,5 @@
 use std::{
-    fs,
+    env, fs,
     io::{Read, Seek, SeekFrom},
     path::PathBuf,
     thread,
@@ -85,14 +85,29 @@ pub fn open(mut v: Vec<String>) {
             window.set_page(Page::Done);
         }
     });
+
+    window.on_extract_here_clicked({
+        let window_handle = window.as_weak();
+        let input = input.clone();
+        move || {
+            let window = window_handle.unwrap();
+            window.set_action(Action::Extract);
+            window.set_progress(true);
+            extract(vec!["".into(), input.clone()]);
+            window.set_page(Page::Done);
+        }
+    });
     window.on_extract_clicked({
         let window_handle = window.as_weak();
         move || {
+            let mut start = input.clone();
+            start.pop();
             let window_handle = window_handle.clone();
             let input = input.clone();
             thread::spawn(move || {
                 let Some(folder) = rfd::FileDialog::new()
                     .set_can_create_directories(true)
+                    .set_directory(start)
                     .pick_folder()
                 else {
                     return;

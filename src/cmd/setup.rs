@@ -1,6 +1,7 @@
 use std::{fs, os::unix::fs::PermissionsExt, process::Command};
 
 use cmdparsing::define;
+use minijinja::render;
 
 use crate::locations::icon_dir;
 
@@ -41,8 +42,7 @@ pub fn setup(mut v: Vec<String>) {
 
     fs::write(
         format!("{}/cdbk.desktop", apps_dir),
-        include_str!("../resources/cdbk.desktop")
-            .replace("{{BIN}}", &std::env::current_exe().unwrap().to_string_lossy()),
+        render!(include_str!("../resources/cdbk.desktop"), BIN => &std::env::current_exe().unwrap()),
     )
     .unwrap();
     let mut perms = fs::metadata(format!("{}/cdbk.desktop", apps_dir))
