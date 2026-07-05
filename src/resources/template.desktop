@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name={{ name }}
 Exec={{ exec }}
+Path={{ exec_dir }}
 Terminal={{ terminal }}
 Type=Application
 {% if description %}

@@ -76,9 +76,14 @@ pub fn install(mut v: Vec<String>) {
     let mut app = applications_dir().unwrap();
     app.push(format!("cdbk-{}", &manifest.name));
     app.set_extension("desktop");
+    let mut exec_dir = exe.clone();
+    exec_dir.pop();
     let desktop = render!(include_str!("../resources/template.desktop"),     
         name => &manifest.name,
-        exec => exe.to_string_lossy(),
+        exec => format!("{} {}", exe.to_string_lossy(), manifest.args.iter().map(|v| {
+            format!("\"{}\"", v) 
+        }).collect::<Vec<String>>().join(" ")),
+        exec_dir => exec_dir.to_string_lossy(),
         terminal => manifest.terminal,
         description => manifest.description.as_deref(),
         icon => icon.as_ref().map(|p| p.to_string_lossy()),

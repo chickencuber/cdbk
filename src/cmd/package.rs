@@ -37,7 +37,7 @@ fn zip_dir<S: AsRef<Path>, T: ToString>(zip: &mut ZipWriter<File>, name: T, src:
 
             std::io::copy(&mut f, zip).unwrap();
         } else if !path_stripped.as_os_str().is_empty() {
-            zip.add_directory(path_as_string, options).unwrap();
+            zip.add_directory(format!("{}/{}", name.to_string(), path_as_string), options).unwrap();
         }
     }
 }

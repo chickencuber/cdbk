@@ -12,6 +12,8 @@ pub struct Manifest {
     pub description: Option<String>,
 
     #[serde(default)]
+    pub args: Vec<String>,
+    #[serde(default)]
     pub categories: Vec<String>,
     #[serde(default)]
     pub terminal: bool,
