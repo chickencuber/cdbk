@@ -1,6 +1,6 @@
 [package]
 name = "cdbk"
-version = "0.3.4"
+version = "0.3.5"
 edition = "2024"
 
 license = "MIT"
@@ -11,14 +11,16 @@ description = "a way to bundle apps for linux"
 [dependencies]
 zip = "8.6.0"
 toml = "1.1.2"
-serde = {version="1.0.228", features=["derive"]}
+serde = { version = "1.0.228", features = ["derive"] }
 
 cmdparsing = "2.2.6"
 dirs = "6.0.0"
-tt-call="1.0.9"
-tt-equal="0.1.2"
+tt-call = "1.0.9"
+tt-equal = "0.1.2"
 
-slint = "1.17.0"
+slint = { version = "1.17.0", features = [
+    "backend-qt",
+] }
 rfd = "0.17.2"
 image = "0.25.10"
 
